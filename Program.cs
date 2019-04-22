@@ -1,54 +1,53 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
-using System.ComponentModel.Design;
-
-namespace CRUDOnSructurs
-{
-    class Program
-    {
-        static void Main(string[] args)
+ static void Main(string[] args)
         {
             Student student = new Student();
+            student.Grade = new int[4];
+            string entered = string.Empty;
+            string title = "Enter the FirstName, LastName, Date of Birth, Contract Number And Grade Students";
 
+            Console.WriteLine(new string('#', title.Length+4));
+            Console.WriteLine($"# {title} #");
+            Console.WriteLine(new string('#', title.Length+4));
 
+            Console.Write("First Name : ");
+            student.FirstName = Console.ReadLine();
 
+            Console.Write("Last Name : ");
+            student.LastName = Console.ReadLine();
 
-            Console.Write("Insert student NAME : ");
-            string name = Console.ReadLine();
+            Console.Write("Date of Birth in format dd/MM/yyyy: ");
+            student.DateOfBirth = Console.ReadLine();
+            DateTime dt;
+            while (!DateTime.TryParseExact(student.DateOfBirth, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out dt))
+            {
+                Console.WriteLine("Invalid date, please retry");
+                student.DateOfBirth = Console.ReadLine();
+            }
 
-            if (!string.IsNullOrEmpty(name))
-                student.Name = name;
-            else
-                Console.WriteLine("Repeat Insert Name");
+            Console.Write("Contract Number : ");
+            student.ContractNumber = Convert.ToInt32(Console.ReadLine());
 
+            Console.Write("Student grades for 4 sessions : \n");
+            for (int i = 0; i < student.Grade.Length; ++i)
+            {
+                Console.Write(" {0} : ", i+1);
+                student.Grade[i] = Convert.ToInt32(Console.ReadLine());
+            }
 
-            Console.WriteLine($"\nStudent name is - {student.Name}");
+            /*
+            //inserting
+            Student student = new Student
+            {
+                FirstName = fName,
+                LastName = lName,
+                DateOfBirth = dt,
+                ContractNumber = contract,
+                Grade = grades.Clone()
+            };
+            */
+            Console.WriteLine($"\n{new string('*', title.Length + 4)}");
+            
+            Console.WriteLine($"Contract Number : {student.ContractNumber}\nFirst Name : {student.FirstName}\nLast Name : {student.LastName}\nDate of Birth : {student.DateOfBirth}\nGrade : {string.Join(" ,", student.Grade)}");
 
-
-            Console.Write("Insert student LASTNAME : ");
-            string lastname = Console.ReadLine();
-            if (!string.IsNullOrEmpty(lastname))
-                student.LastName = lastname;
-            else
-                Console.WriteLine("Repeat Insert Name");
-
-
-            Console.WriteLine($"\nStudent name is - {student.Name}");
-            Console.WriteLine($"\nStudent lastname is - {student.LastName}");
-
-            // Get the type handle of a specified class.
-            Type myType = typeof(Student);
-
-            // Get the fields of the specified class.
-            FieldInfo[] myField = myType.GetFields();
-
-            Console.WriteLine(myField.Count());
             Console.WriteLine("\nPress any key to continue..");
             Console.ReadKey();
-        }
-    }
-}
